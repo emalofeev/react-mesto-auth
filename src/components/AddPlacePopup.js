@@ -2,21 +2,20 @@ import { useEffect, useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 function AddPlacePopup({ isOpen, onClose, onSubmit, onAddPlace }) {
-  const counterRefName = useRef(0);
-  const counterRefLink = useRef(0);
+  const nameInputRef = useRef(0);
+  const linkInputRef = useRef(0);
 
   useEffect(() => {
-    counterRefName.current.value = "";
-    counterRefLink.current.value = "";
+    nameInputRef.current.value = "";
+    linkInputRef.current.value = "";
   }, [isOpen]);
 
   function handleSubmit(e) {
     e.preventDefault();
     onAddPlace({
-      name: counterRefName.current.value,
-      link: counterRefLink.current.value,
+      name: nameInputRef.current.value,
+      link: linkInputRef.current.value,
     });
-    e.target.reset();
   }
 
   return (
@@ -37,7 +36,7 @@ function AddPlacePopup({ isOpen, onClose, onSubmit, onAddPlace }) {
         minLength="2"
         maxLength="30"
         id="popup__input-error-nameCard"
-        ref={counterRefName}
+        ref={nameInputRef}
         required
       />
       <span className="popup__text-error popup__input-error-nameCard"></span>
@@ -47,7 +46,7 @@ function AddPlacePopup({ isOpen, onClose, onSubmit, onAddPlace }) {
         name="link"
         type="url"
         id="popup__input-error-linkCard"
-        ref={counterRefLink}
+        ref={linkInputRef}
         required
       />
       <span className="popup__text-error popup__input-error-linkCard"></span>

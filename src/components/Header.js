@@ -1,7 +1,7 @@
 import logo from "../images/header-logo.svg";
 import { Routes, Route, Link } from "react-router-dom";
 
-function Header({ userData, handleSignout }) {
+function Header({ email, handleSignOut }) {
   return (
     <header className="header">
       <img className="header__logo" alt="Лого" src={logo} />
@@ -10,11 +10,11 @@ function Header({ userData, handleSignout }) {
           path="/"
           element={
             <div className="header__data">
-              <p className="header__email">{userData}</p>
+              <p className="header__email">{email}</p>
               <Link
                 to="/sign-in"
                 className="header__link header__link_out"
-                onClick={handleSignout}
+                onClick={handleSignOut}
               >
                 Выйти
               </Link>

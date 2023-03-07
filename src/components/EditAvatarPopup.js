@@ -2,16 +2,16 @@ import { useRef, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 function EditAvatarPopup({ isOpen, onClose, onSubmit, onUpdateAvatar }) {
-  const counterRef = useRef(0);
+  const inputRef = useRef(0);
 
   useEffect(() => {
-    counterRef.current.value = "";
+    inputRef.current.value = "";
   }, [isOpen]);
 
   function handleSubmit(e) {
     e.preventDefault();
     onUpdateAvatar({
-      avatar: counterRef.current.value,
+      avatar: inputRef.current.value,
     });
   }
 
@@ -31,7 +31,7 @@ function EditAvatarPopup({ isOpen, onClose, onSubmit, onUpdateAvatar }) {
         name="avatar"
         type="url"
         id="popup__input-error-linkAvatar"
-        ref={counterRef}
+        ref={inputRef}
         required
       />
       <span className="popup__text-error popup__input-error-linkAvatar"></span>

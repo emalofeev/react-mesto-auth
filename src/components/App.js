@@ -14,6 +14,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Register from "./Register";
 import InfoTooltip from "./InfoTooltip";
+import success from "../images/success.svg";
+import fail from "../images/fail.svg";
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -24,10 +26,10 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [userData, setUserData] = useState("");
-  const [authRes, setAuthRes] = useState(false);
+  const [email, setEmail] = useState("");
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
-  const [isInfoTooltipMessage, setInfoTooltipMessage] = useState("");
+  const [infoTooltipMessage, setInfoTooltipMessage] = useState("");
+  const [infoTooltipImage, setInfoTooltipImage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +39,7 @@ function App() {
         .checkToken(jwt)
         .then((res) => {
           setLoggedIn(true);
-          setUserData(res.data.email);
+          setEmail(res.data.email);
           navigate("/");
         })
         .catch((err) => console.log(err));
@@ -47,9 +49,9 @@ function App() {
   useEffect(() => {
     if (loggedIn) {
       Promise.all([api.getProfileInfo(), api.getInitialCards()])
-        .then((data) => {
-          setCurrentUser(data[0]);
-          setCards(data[1]);
+        .then(([userData, cards]) => {
+          setCurrentUser(userData);
+          setCards(cards);
         })
         .catch((err) => {
           console.log(err);
@@ -168,8 +170,8 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-        setAuthRes(false);
         setInfoTooltipMessage("Что-то пошло не так! Попробуйте ещё раз.");
+        setInfoTooltipImage(fail);
         setIsInfoTooltipPopupOpen(true);
       });
   }
@@ -178,8 +180,8 @@ function App() {
     return auth
       .register(data)
       .then(() => {
-        setAuthRes(true);
         setInfoTooltipMessage("Вы успешно зарегистрировались!");
+        setInfoTooltipImage(success);
         setIsInfoTooltipPopupOpen(true);
       })
       .then(() => {
@@ -187,10 +189,13 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+        setInfoTooltipMessage("Что-то пошло не так! Попробуйте ещё раз.");
+        setInfoTooltipImage(fail);
+        setIsInfoTooltipPopupOpen(true);
       });
   }
 
-  function handleSignout() {
+  function handleSignOut() {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
     navigate("/sign-in");
@@ -198,7 +203,7 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header userData={userData} handleSignout={handleSignout} />
+      <Header email={email} handleSignOut={handleSignOut} />
 
       <Routes>
         <Route
@@ -257,8 +262,8 @@ function App() {
       <InfoTooltip
         isOpen={isInfoTooltipPopupOpen}
         onClose={closeAllPopups}
-        message={isInfoTooltipMessage}
-        authRes={authRes}
+        infoTooltipMessage={infoTooltipMessage}
+        infoTooltipImage={infoTooltipImage}
       ></InfoTooltip>
     </CurrentUserContext.Provider>
   );
