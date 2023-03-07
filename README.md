@@ -26,7 +26,7 @@
 git clone https://github.com/emalofeev/react-mesto-auth.git
 ```
 ```no-highlight
-cd mesto-react
+cd mesto-react-auth
 ```
 ```no-highlight
 npm install
